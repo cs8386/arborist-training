@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Arborist Training Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h1 class="login-title">Arborist Training Tracker</h1>
+      <p class="login-tagline">ISA · ANSI Z133 · OSHA Crane</p>
+      <form id="loginForm" class="login-form">
+        <input type="password" id="loginPassword" class="login-input" placeholder="Enter access password" autocomplete="current-password" autofocus>
+        <button type="submit" class="btn btn-primary login-btn">Log in</button>
+      </form>
+      <p id="loginError" class="login-error" style="display:none;"></p>
+    </div>
+  </div>
+
+  <div class="app-wrap" id="appWrap" style="display:none;">
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 class="logo">Arborist Training Tracker</h1>
+        <p class="tagline">ISA · ANSI Z133 · OSHA Crane</p>
+      </div>
+      <nav class="header-nav">
+        <div class="auth-status" id="authStatus">
+          <span id="authText" class="auth-text">Link your Google to save slides to your Drive</span>
+          <button id="linkGoogle" class="btn btn-google" style="display:none;">
+            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Link Google Account
+          </button>
+          <span id="googleLinked" class="connected-email" style="display:none;">
+            <span class="status-dot"></span>
+            Google linked
+          </span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero-inner">
+        <h2 class="hero-title">Your Training Library</h2>
+        <p class="hero-desc">Track arboriculture trainings and generate professional slide decks with Claude AI.</p>
+        <div class="progress-summary" id="progressSummary" style="display:none;">
+          <div class="progress-header">
+            <span class="progress-text" id="progressText">0 of 0 covered</span>
+            <div class="progress-filters">
+              <select id="categoryFilter" class="category-filter" aria-label="Filter by category">
+                <option value="">All categories</option>
+              </select>
+              <div class="progress-filter">
+                <button type="button" class="progress-filter-btn active" data-filter="all">All</button>
+                <button type="button" class="progress-filter-btn" data-filter="not_covered">To cover</button>
+                <button type="button" class="progress-filter-btn" data-filter="covered">Covered</button>
+              </div>
+            </div>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="search" id="searchInput" class="search-input" placeholder="Search trainings…" aria-label="Search trainings">
+          </div>
+          <div class="toolbar-actions">
+            <button id="loadSamplesBtn" class="btn btn-ghost" data-label="Load samples">
+              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="btn-label">Load samples</span>
+            </button>
+            <button id="newTrainingBtn" class="btn btn-primary">
+              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New training
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content">
+      <div class="loading" id="loading">
+        <span class="spinner"></span>
+        <span>Loading trainings…</span>
+      </div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3 class="empty-title">No trainings yet</h3>
+        <p class="empty-desc">Get started by loading sample trainings or creating your first one.</p>
+        <div class="empty-actions">
+          <button id="emptyLoadSamples" class="btn btn-primary">Load sample trainings</button>
+          <button id="emptyNewTraining" class="btn btn-ghost">Create new training</button>
+        </div>
+      </div>
+      <div id="sections" class="sections"></div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-overlay" id="trainingModal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Training</h2>
+        <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+      </div>
+      <form id="trainingForm" class="modal-body">
+        <input type="hidden" id="trainingId">
+        <div class="form-section">
+          <h4 class="form-section-title">Details</h4>
+          <div class="form-group">
+            <label for="trainingTitle">Title</label>
+            <input type="text" id="trainingTitle" required placeholder="e.g. Chain Saw Safety">
+          </div>
+          <div class="form-group">
+            <label for="trainingDescription">Description</label>
+            <textarea id="trainingDescription" rows="2" placeholder="Brief description of the training"></textarea>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4 class="form-section-title">Standard & format</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trainingStandard">Standard</label>
+              <select id="trainingStandard" required>
+                <option value="ISA">ISA</option>
+                <option value="ANSI_Z133">ANSI Z133</option>
+                <option value="OSHA_CRANE">OSHA Crane</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="trainingFormat">Format</label>
+              <select id="trainingFormat">
+                <option value="standard">Standard (6–12 slides)</option>
+                <option value="deep_dive">Deep Dive (2–4 hrs, ~30 slides)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="trainingCategory">Category</label>
+            <input type="text" id="trainingCategory" placeholder="e.g. Safety Equipment">
+          </div>
+        </div>
+        <div class="form-section">
+          <h4 class="form-section-title">Topics</h4>
+          <div class="form-group">
+            <label for="trainingTopics">Key topics (comma-separated)</label>
+            <input type="text" id="trainingTopics" placeholder="PPE, electrical hazards, kickback prevention">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="modalCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="generateModal" style="display:none;">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Generate slides</h2>
+        <button type="button" class="modal-close" id="generateModalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="generate-info">Claude will create content based on ISA, ANSI Z133, and OSHA best practices. The presentation will be saved to your Google Drive.</p>
+        <div class="generate-target">
+          <span class="generate-label">Training</span>
+          <span id="generateTrainingName" class="generate-training"></span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="generateCancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="generateConfirm">
+            <span class="btn-text">Generate slides</span>
+            <span class="btn-loading" style="display:none;">
+              <span class="spinner spinner-sm"></span>
+              Generating…
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
